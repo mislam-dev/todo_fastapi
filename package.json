@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "husky:prepare": "npx husky init"
+    "husky:prepare": "husky"
   },
   "keywords": [],
   "author": "",
