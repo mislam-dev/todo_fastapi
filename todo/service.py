@@ -1,96 +1,66 @@
 from uuid import UUID
+
 from fastapi import HTTPException
-from sqlalchemy import Uuid
-from todo.dto.todo import TodoCreateDto, TodoUpdateDto
+from sqlalchemy import select
 from sqlalchemy.orm import Session
+
+from todo.dto.todo import TodoCreateDto, TodoUpdateDto
 from todo.models.todo import Todo
+from user.models.user import User
 
 
-def getAll(
-    db: Session,
-    user_id: UUID,
-):
-    todo_data = db.query(Todo).filter(Todo.user_id == user_id).all()
-    return todo_data
+class TodoService:
+    def __init__(self, db: Session, user: User) -> None:
+        self.db = db
+        self.user = user
 
+    def get_all(self):
+        stmt = select(Todo).where(Todo.user_id == self.user.id)
+        todo_data = self.db.scalars(stmt).all()
+        return todo_data
 
-def create(
-    db: Session,
-    data: TodoCreateDto,
-    user_id: UUID,
-):
-    todo_data = data.model_dump()
-    todo = Todo(
-        **todo_data,
-        user_id=user_id,
-    )
+    def create(self, data: TodoCreateDto):
+        todo_data = data.model_dump()
+        todo = Todo(
+            **todo_data,
+            user_id=self.user.id,
+        )
 
-    db.add(todo)
-    db.commit()
-    db.refresh(todo)
-    return todo
+        self.db.add(todo)
+        self.db.commit()
+        self.db.refresh(todo)
+        return todo
 
-
-def getSingle(
-    db: Session,
-    id: UUID,
-    user_id: UUID,
-):
-    todo_data = (
-        db.query(Todo)
-        .filter(
+    def get_single(self, id: UUID):
+        stmt = select(Todo).where(
             Todo.id == id,
-            Todo.user_id == user_id,
+            Todo.user_id == self.user.id,
         )
-        .first()
-    )
-    if todo_data is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Todo not found!",
-        )
-    return todo_data
+        todo_data = self.db.scalars(stmt).first()
 
+        if todo_data is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Todo not found!",
+            )
+        return todo_data
 
-def update(
-    db: Session,
-    id: UUID,
-    data: TodoUpdateDto,
-    user_id: UUID,
-):
+    def update(self, id: UUID, data: TodoUpdateDto):
 
-    todo = getSingle(db, id, user_id)
+        todo = self.get_single(id)
 
-    if not todo.user_id == user_id:
-        raise HTTPException(
-            status_code=403,
-            detail="You are not authorized to perform this action!",
-        )
-    # update data
-    updated_data = data.model_dump(exclude_unset=True)
-    for key, value in updated_data.items():
-        setattr(todo, key, value)
+        updated_data = data.model_dump(exclude_unset=True)
+        for key, value in updated_data.items():
+            setattr(todo, key, value)
 
-    db.commit()
-    db.refresh(todo)
-    return todo
+        self.db.commit()
+        self.db.refresh(todo)
+        return todo
 
+    def remove(self, id: UUID):
 
-def remove(
-    db: Session,
-    id: UUID,
-    user_id: UUID,
-):
+        todo = self.get_single(id)
+        self.db.delete(todo)
+        self.db.commit()
 
-    todo = getSingle(db, id, user_id)
-
-    if not todo.user_id == user_id:
-        raise HTTPException(
-            status_code=403,
-            detail="You are not authorized to perform this action!",
-        )
-    # update data
-    db.delete(todo)
-    db.commit()
-
-    return True
+        return None
