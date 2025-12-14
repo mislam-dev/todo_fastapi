@@ -17,6 +17,12 @@ class UserStatus(str, Enum):
     suspended = "suspended"
 
 
+class UserRole(str, Enum):
+    ADMIN = "ADMIN"
+    MODERATOR = "MODERATOR"
+    USER = "USER"
+
+
 # models
 class User(Base):
 
@@ -35,4 +41,7 @@ class User(Base):
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+    role: Mapped[Optional[UserRole]] = mapped_column(
+        SQLEnum(UserRole), default=UserRole.USER
     )

@@ -53,3 +53,7 @@ class UserService:
             "access_token": token,
             "token_type": "bearer",
         }
+
+    def get_all_users(self):
+        stmt = select(User)
+        return self.db.scalars(stmt).all()
