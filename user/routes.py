@@ -44,10 +44,10 @@ def me(current_user: User = Depends(auth.get_current_user)):
 @router.get(
     "/users",
     response_model=List[UserResponseDto],
-    dependencies=[Depends(RoleChecker([UserRole.MODERATOR, UserRole.ADMIN]))],
+    dependencies=[
+        Depends(auth.authenticate),
+        Depends(RoleChecker([UserRole.MODERATOR, UserRole.ADMIN])),
+    ],
 )
-def all_user(
-    auth: bool = Depends(auth.authenticate),
-    user_service: UserService = Depends(get_user_service),
-):
+def all_user(user_service: UserService = Depends(get_user_service)):
     return user_service.get_all_users()
