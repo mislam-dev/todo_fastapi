@@ -1,0 +1,121 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+.env*
+pip-log.txt
+pip-delete-this-directory.txt
+.tox
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+*.log
+.git*
+tests
+scripts
+postman
+./postgres-data
+
+# ==========================
+# PYTHON / FASTAPI
+# ==========================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+.venv/
+env/
+.env_folder/
+.todo_fast_env/
+# Environment Variables (Keep secrets safe!)
+.env
+.env.local
+.env.*.local
+
+# Distribution / Packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Unit Test / Coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Databases (If using SQLite locally)
+*.sqlite3
+*.db
+
+# ==========================
+# NODE.JS (Husky & Tools)
+# ==========================
+# Dependencies
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Husky (Keep the hooks, ignore specific generated files if necessary)
+# Usually, we commit .husky/ but we might ignore the generic script if customized
+# .husky/_  <-- Uncomment if you encounter issues with local script paths
+
+# ==========================
+# IDE / EDITOR / OS
+# ==========================
+# MacOS
+.DS_Store
+
+# VS Code
+.vscode/*
+.vscode
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# JetBrains (PyCharm, WebStorm)
+.idea/
+
+# Local history
+.history/
+.husky
+.husky/*
+package.json 
+pnpm-lock.yaml
+.gitignore
+commitlint.config.js
+dockerfile
+docker-compose.yaml
+.dockerignore
+.vscode/settings.json

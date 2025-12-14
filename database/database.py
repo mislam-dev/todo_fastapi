@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from core.config.settings import settings
 
 
 class Database:
@@ -20,8 +21,7 @@ class Database:
         base.metadata.create_all(bind=self.engine)
 
 
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/todo"
-db_instance = Database(SQLALCHEMY_DATABASE_URL)
+db_instance = Database(settings.DATABASE_URL)
 
 
 class Base(DeclarativeBase):
